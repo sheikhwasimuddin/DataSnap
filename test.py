@@ -1,16 +1,19 @@
+import os
 from firebase import Firebase
 import jwt
+from dotenv import load_dotenv
+load_dotenv()
 
 config = {
-  "apiKey": "AIzaSyAc7MIazEXzi7EIkygP--ik13T-i1DcHHI",
-  "authDomain": "forms-6e835.firebaseapp.com",
-  "databaseURL": "https://forms-6e835-default-rtdb.firebaseio.com",
-  "projectId": "forms-6e835",
-  "storageBucket": "forms-6e835.appspot.com",
-  "messagingSenderId": "361932182221",
-  "appId": "1:361932182221:web:ca1436672474e601fb4f84"
-}
-
+  "apiKey": os.environ.get("FIREBASE_APIKEY"),
+  "authDomain": os.environ.get("FIREBASE_AUTHDOMAIN"),
+  "databaseURL": os.environ.get("FIREBASE_DATABASEURL"),
+  "projectId": os.environ.get("FIREBASE_PROJECT_ID"),
+  "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET"),
+  "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID"),
+  "appId": os.environ.get("FIREBASE_APP_ID"),
+  "measurementId": os.environ.get("FIREBASE_MEASUREMENT_ID")
+  }
 firebase = Firebase(config)
 auth = firebase.auth()
 
