@@ -15,7 +15,7 @@ firebase = Firebase(config)
 auth = firebase.auth()
 
 # Login user
-user = auth.sign_in_with_email_and_password("test@gmaol.com", "123456")
+user = auth.sign_in_with_email_and_password("test@gmail.com", "123456")
 token = user['idToken']
 
 # Decode token (optional)
