@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Sofia|ABeeZee|Amaranth' rel='stylesheet'>
+  <title>DataSnap | Admin Panel</title>
+  <link rel="shortcut icon" href="{{url_for('static',filename='favicon.png')}}" type="image/x-icon">
+</head>
+<style>
+  body{
+    background-color: #d3d7e7;
+    /* background-image: url("{{url_for('static',filename='logo_main.png')}}");
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-repeat: no-repeat; */
+}
+  .fnt{
+    font-family: Amaranth;
+  }
+  .contri {
+    border-radius: 20px;
+    box-shadow: -2px -2px 5px #d7d9e0, 2px 2px 5px #d7d9e0;
+  }
+  .contri_btn {
+    border-radius: 17px;
+    box-shadow: -2px -2px 5px #d7d9e0, 2px 2px 5px #6f768f;
+  }
+</style>
+<body>
+  {% macro catch(on_exception) %}
+  {{ handle_catch(caller, on_exception) }}
+  {% endmacro %}
+  <div>
+    <h1 class="text-center" style="font-family:Amaranth ;"> <img src="{{url_for('static',filename='favicon.png')}}" alt="" height="40"> DataSnap <img src="{{url_for('static',filename='favicon.png')}}" alt="" height="40"></h1>
+    <!-- Button trigger modal -->
+    <div class="row">
+      <div class="col-1">
+        <a href="/logout"><button type="button" class="btn btn-primary mx-3 contri_btn fnt">
+          Logout
+        </button></a>
+      </div>
+      <div class="col-2">
+        <button type="button" class="btn btn-primary mx-2 contri_btn fnt" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Create New Form
+        </button>
+      </div>
+      <div class="col">
+        <input id="search_chapter" class="form-control me-2 mx-2 contri fnt" type="search" placeholder="Search" aria-label="Search"
+          style="width: 40%;float:right">
+      </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade contri" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fnt" id="exampleModalLabel">Add New Form</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/new-form" method="POST">
+              <div class="mb-1">
+                <label for="formGroupExampleInput" class="form-label fnt">Form Title</label>
+                <input type="text" class="form-control contri" id="form_title" name="form_title"
+                  placeholder="Form Title" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary contri_btn" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary contri_btn">Create Form</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    {% call catch('') %}
+   {% for key,val in forms.items()%}
+
+
+   <div class="card m-3 mx-4 contri" style="width: 13rem;">
+     <div class="card-body">
+ 
+           <h5 class="card-title fnt" style="text-align:center">{{val['form_title']}}</h5>
+            <center>
+
+                <a type="button" href='/edit/{{key}}' class="btn btn-primary card-link contri_btn fnt" style="width:100%">Edit Form</a><br>
+                <form action="/form-delete/{{key}}" method ="post" onsubmit="return confirmation(this)">
+                <button  type="submit" 
+                  class="btn btn-danger card-link my-2 contri_btn fnt" style="width:100%">Delete Form</button>
+                </form>
+            </center>
+   
+
+     </div>
+   </div>
+   {% endfor %}
+   {% endcall %}
+
+
+    <script>
+      function confirmation(element) {
+        result = confirm("Are you sure to delete this Chapter from the records?")
+        if (result == true) {
+         return true
+
+
+        }
+        else {
+                return false
+        }
+      }
+    </script>
+    <script>
+      document.getElementById("search_chapter").addEventListener('input', function () {
+        data = document.getElementById("search_chapter").value.toLowerCase()
+        card_titles = document.getElementsByClassName("card-title")
+        card = document.getElementsByClassName("card")
+        for (var i = 0; i < card_titles.length; i++) {
+          title = card_titles[i].innerHTML.toLowerCase()
+          if (title.includes(data)) {
+            card[i].style.display = "block"
+          }
+          else {
+            card[i].style.display = "none"
+          }
+        }
+
+
+      })
+    </script>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+
+
+</body>
+
+</html>

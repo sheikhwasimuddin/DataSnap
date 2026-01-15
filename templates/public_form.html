@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Sofia|ABeeZee|Amaranth' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js" integrity="sha256-WVsM3xrcqyuFNF3W1qtIKbHFsD0977nDQA8DCMp1zCw=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js" integrity="sha256-2/3R3NV5zryj0fDjD3cDh+SNiWQ/TJiMVZzAo5FrhiU=" crossorigin="anonymous"></script>
+  <title>DataSnap</title>
+  <link rel="shortcut icon" href="{{url_for('static',filename='favicon.png')}}" type="image/x-icon">
+</head>
+<style>
+  body{
+    background-color: #d3d7e7;
+}
+  .fnt{
+    font-family: Amaranth;
+  }
+  .contri {
+    border-radius: 20px;
+    box-shadow: -2px -2px 5px #d7d9e0, 2px 2px 5px #d7d9e0;
+  }
+  .contri_btn {
+    border-radius: 17px;
+    box-shadow: -2px -2px 5px #d7d9e0, 2px 2px 5px #6f768f;
+  }
+</style>
+<body>
+  {% macro catch(on_exception) %}
+  {{ handle_catch(caller, on_exception) }}
+  {% endmacro %}
+  <div>
+    <h1 class="text-center" style="font-family:Amaranth ;">{{form_data['form_title']}}</h1>
+    <!-- Button trigger modal -->
+    <div class="row my-4">
+        <div class="col">
+            
+            
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+    {% if form_data['accepting_response'] == 1 %}
+  <div class="container" id="main_form">
+      <form action="{{callback_url}}" method="post">
+    {% call catch('') %}
+    {% for key,val in form_data['data'].items()%}
+    {% if val != "timestamp" %}
+    {% if val['type'] == "text" %}
+    <div class="input-group my-2" id="{{key}}">
+        <input class="input-group-text mx-2" value="{{val['text']}}" disabled>
+        <input type="text"  class="form-control" name="{{key}}" required>
+    
+
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      {% endcall %}
+      <button type="submit" class="btn btn-primary mx-3 contri_btn fnt" style = "float:right" >
+        SUBMIT<i class="fa fa-cloud-download mx-2"></i>
+      </button>
+    </form>
+  </div>
+ 
+    </div>
+    {% else %}
+    <h2 class="text-center">Form is not accepting Responses</h2>
+{% endif %}
+    <!-- Modal -->
+
+  
+    <script>
+    
+    all_input_group_text = document.getElementsByClassName("input-group-text")
+    if(all_input_group_text.length!=0){
+      for(let i=0;i<all_input_group_text.length;i++){
+        let temp_elem =all_input_group_text[i]
+        temp_elem.addEventListener("input",function(){
+           let parent_id  = temp_elem.parentElement.id
+           data[parent_id] = all_input_group_text[i].value
+        })
+      }
+    }
+     
+
+    function Submit(){
+        $.ajax({
+          url: "{{callback_url}}",
+          type:'POST',
+          data,
+        }).done(function(data) {
+            alert(data)
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest);
+            alert("error");
+        })
+      }
+
+      function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+    </script>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+
+
+</body>
+
+</html>
