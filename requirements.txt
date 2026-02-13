@@ -2,6 +2,7 @@ setuptools==82.0.0
 wheel
 
 Flask==2.0.1
+Werkzeug==2.0.3
 gunicorn>=21.2.0
 
 pyrebase4
