@@ -2,7 +2,7 @@ setuptools==82.0.0
 wheel
 
 Flask==2.0.1
-gunicorn==20.1.0
+gunicorn>=21.2.0
 
 pyrebase4
 python-dotenv
