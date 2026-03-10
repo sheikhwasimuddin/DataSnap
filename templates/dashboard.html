@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>DataSnap | Dashboard</title>
@@ -12,12 +14,27 @@
   <style>
     * {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      box-sizing: border-box;
     }
 
     body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+      background-color: #000000;
+      color: #E7E9EA;
       padding: 24px;
       min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* 3D Canvas Background */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .header {
@@ -27,10 +44,12 @@
       margin-bottom: 32px;
       flex-wrap: wrap;
       gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #2F3336;
     }
 
     h1 {
-      color: #1a1a1a;
+      color: #E7E9EA;
       font-size: 32px;
       font-weight: 700;
       margin: 0;
@@ -50,169 +69,229 @@
     .search-box {
       max-width: 300px;
       width: 100%;
+      position: relative;
     }
 
     .search-box input {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 10px 16px;
+      width: 100%;
+      background-color: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 9999px;
+      padding: 10px 16px 10px 40px;
       font-size: 14px;
-      transition: all 0.3s ease;
-      background-color: white;
+      color: #E7E9EA;
+      transition: all 0.2s ease;
+    }
+
+    .search-box::before {
+      content: '\f002';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #71767B;
+      font-size: 14px;
     }
 
     .search-box input:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: #1D9BF0;
+      box-shadow: 0 0 0 1px #1D9BF0;
+      outline: none;
     }
 
-    .btn-primary, .btn-danger {
+    .search-box input::placeholder {
+      color: #71767B;
+    }
+
+    .btn-primary,
+    .btn-danger {
       padding: 10px 20px;
       font-size: 14px;
-      font-weight: 600;
-      border-radius: 8px;
+      font-weight: 700;
+      border-radius: 9999px;
       border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: #E7E9EA;
+      color: #0F1419;
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-      color: white;
+      background: #D7DBDC;
+      color: #0F1419;
+    }
+
+    .btn-primary:focus {
+      box-shadow: 0 0 0 2px #000000, 0 0 0 4px #E7E9EA;
+      outline: none;
     }
 
     .btn-danger {
-      background: #dc3545;
-      color: white;
+      background: #000000;
+      color: #F4212E;
+      border: 1px solid #F4212E;
     }
 
     .btn-danger:hover {
-      background: #c82333;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+      background: rgba(244, 33, 46, 0.1);
     }
 
     .modal-content {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      background-color: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
     }
 
     .modal-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
+      background: #000000;
+      color: #E7E9EA;
+      border-bottom: 1px solid #2F3336;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 24px;
+    }
+
+    .modal-title {
+      font-weight: 700;
+      font-size: 20px;
     }
 
     .modal-header .btn-close {
-      filter: invert(1);
+      filter: invert(1) grayscale(100%) brightness(200%);
+      opacity: 0.5;
+    }
+
+    .modal-header .btn-close:hover {
+      opacity: 1;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      border-top: 1px solid #2F3336;
+      padding: 16px 24px;
+    }
+
+    .form-label {
+      color: #E7E9EA;
+      font-weight: 500;
+      margin-bottom: 8px;
     }
 
     .form-control {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      background-color: #f8f9fa;
+      background-color: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 15px;
+      color: #E7E9EA;
+      transition: all 0.2s ease;
     }
 
     .form-control:focus {
-      border-color: #667eea;
-      background-color: white;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: #1D9BF0;
+      background-color: #000000;
+      color: #E7E9EA;
+      box-shadow: 0 0 0 1px #1D9BF0;
+      outline: none;
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
       margin-top: 24px;
     }
 
     .card {
-      background: white;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
+      background: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 16px;
+      transition: all 0.1s ease;
       overflow: hidden;
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      background: #16181C;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(29, 155, 240, 0.1);
+    }
+
+    .card-body {
+      transform: translateZ(40px);
     }
 
     .card-body {
       padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
     .card-title {
-      color: #1a1a1a;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      text-align: center;
+      color: #E7E9EA;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
       word-break: break-word;
+      line-height: 1.4;
+      flex-grow: 1;
     }
 
     .card-actions {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
+      margin-top: auto;
     }
 
     .card-actions .btn {
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 6px;
-      border: none;
-      transition: all 0.3s ease;
       width: 100%;
+      padding: 12px;
+      font-size: 14px;
     }
 
     .card-actions .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: #E7E9EA;
+      color: #0F1419;
     }
 
     .card-actions .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .card-actions .btn-danger {
-      background: #dc3545;
-      color: white;
-    }
-
-    .card-actions .btn-danger:hover {
-      background: #c82333;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+      background: #D7DBDC;
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+
       .header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
       }
 
       .header-actions {
         width: 100%;
         flex-direction: column;
+        align-items: stretch;
       }
 
       .search-box {
-        width: 100%;
+        max-width: none;
       }
 
       .cards-grid {
@@ -221,7 +300,9 @@
     }
   </style>
 </head>
+
 <body>
+  <canvas id="bg-canvas"></canvas>
   {% macro catch(on_exception) %}
   {{ handle_catch(caller, on_exception) }}
   {% endmacro %}
@@ -238,7 +319,8 @@
       <div class="search-box">
         <input type="search" id="search_chapter" placeholder="Search forms..." aria-label="Search">
       </div>
-      <a href="/logout"><button type="button" class="btn-primary"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
+      <a href="/logout"><button type="button" class="btn-primary"><i class="fas fa-sign-out-alt"></i>
+          Logout</button></a>
     </div>
   </div>
 
@@ -254,7 +336,8 @@
           <div class="modal-body">
             <div class="mb-3">
               <label for="formGroupExampleInput" class="form-label">Form Title</label>
-              <input type="text" class="form-control" id="form_title" name="form_title" placeholder="Enter form title" required>
+              <input type="text" class="form-control" id="form_title" name="form_title" placeholder="Enter form title"
+                required>
             </div>
           </div>
           <div class="modal-footer">
@@ -276,7 +359,8 @@
         <div class="card-actions">
           <a href='/edit/{{key}}' class="btn btn-primary"><i class="fas fa-edit"></i> Edit Form</a>
           <form action="/form-delete/{{key}}" method="post" onsubmit="return confirmation(this)" style="margin: 0;">
-            <button type="submit" class="btn btn-danger" style="width: 100%;"><i class="fas fa-trash"></i> Delete Form</button>
+            <button type="submit" class="btn btn-danger" style="width: 100%;"><i class="fas fa-trash"></i> Delete
+              Form</button>
           </form>
         </div>
       </div>
@@ -295,7 +379,7 @@
       const searchTerm = this.value.toLowerCase();
       const cardTitles = document.getElementsByClassName("card-title");
       const cards = document.getElementsByClassName("card");
-      
+
       for (let i = 0; i < cardTitles.length; i++) {
         const title = cardTitles[i].innerHTML.toLowerCase();
         if (title.includes(searchTerm)) {
@@ -305,6 +389,107 @@
         }
       }
     });
+
+    // 3D Tilt Effect
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // Calculate tilt angle based on mouse distance from center
+        // Max tilt is 8 degrees
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+
+        card.style.transform = `perspective(1000px) scale3d(1.02, 1.02, 1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)';
+        card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+      });
+
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'none'; // remove transition for smooth tracking
+      });
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Three.js 3D Background Setup
+    const canvas = document.querySelector('#bg-canvas');
+    if (canvas) {
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x000000, 0.04);
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.position.setZ(15);
+
+      const geometry = new THREE.IcosahedronGeometry(10, 1);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x1D9BF0, wireframe: true, transparent: true, opacity: 0.15
+      });
+      const torus = new THREE.Mesh(geometry, material);
+      scene.add(torus);
+
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 300;
+      const posArray = new Float32Array(particlesCount * 3);
+      for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 60;
+      }
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05, color: 0xE7E9EA, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending
+      });
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      const windowHalfX = window.innerWidth / 2;
+      const windowHalfY = window.innerHeight / 2;
+
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+        torus.rotation.x += 0.002;
+        torus.rotation.y += 0.003;
+        torus.rotation.z += 0.001;
+        torus.position.y = Math.sin(elapsedTime * 0.5) * 1.5;
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        scene.rotation.y += 0.05 * (targetX - scene.rotation.y);
+        scene.rotation.x += 0.05 * (targetY - scene.rotation.x);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
   </script>
 </body>
+
 </html>

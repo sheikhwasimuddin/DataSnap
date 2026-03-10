@@ -11,3 +11,4 @@ requests
 
 grpcio>=1.62.0
 protobuf>=4.21.0
+requests-toolbelt==0.10.1

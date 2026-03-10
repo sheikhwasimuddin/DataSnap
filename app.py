@@ -93,8 +93,10 @@ def index():
 def open_form(variable_1):
     if request.method == 'POST':
         dictionary = json.loads(request.form['main'])
+        form_desc = request.form.get("form_desc", "")
         dictionary['timestamp'] = 'timestamp'
         db.child("Forms").child(session['user_id']).child(variable_1).child("data").set(dictionary)
+        db.child("Forms").child(session['user_id']).child(variable_1).update({"form_desc": form_desc})
         return "0"
     form_data_edit= db.child("Forms").child(session['user_id']).child(variable_1).get().val()
     form_data_edit['callback_url'] = f"/edit/{variable_1}"
@@ -211,7 +213,7 @@ def delete(form_id):
     
 @app.route("/logout")
 def logout_form():
-    session.pop("user_id")
+    session.clear()
     return redirect("/")
 
 @app.before_request

@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>DataSnap</title>
@@ -19,16 +21,29 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-color: #000000;
+      color: #E7E9EA;
       min-height: 100vh;
       margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* 3D Canvas Background */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .card {
-      background: white;
-      border: none;
+      background: #000000;
+      border: 1px solid #2F3336;
       border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       padding: 60px 40px;
       text-align: center;
       max-width: 400px;
@@ -39,13 +54,14 @@
       width: 100px;
       height: 100px;
       margin: 0 auto 24px;
-      background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+      background: rgba(255, 212, 0, 0.1);
+      border: 2px solid rgba(255, 212, 0, 0.4);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 50px;
-      color: white;
+      color: #FFD400;
       animation: scaleIn 0.5s ease-out;
     }
 
@@ -54,9 +70,11 @@
         transform: scale(0);
         opacity: 0;
       }
+
       50% {
         transform: scale(1.1);
       }
+
       100% {
         transform: scale(1);
         opacity: 1;
@@ -64,7 +82,7 @@
     }
 
     h2 {
-      color: #1a1a1a;
+      color: #E7E9EA;
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 12px;
@@ -72,7 +90,7 @@
     }
 
     p {
-      color: #666;
+      color: #71767B;
       font-size: 16px;
       margin: 0;
       line-height: 1.6;
@@ -81,17 +99,19 @@
     .powered-by {
       margin-top: 24px;
       font-size: 12px;
-      color: #999;
+      color: #71767B;
     }
 
     .powered-by a {
-      color: #667eea;
+      color: #1D9BF0;
       text-decoration: none;
       font-weight: 600;
     }
   </style>
 </head>
+
 <body>
+  <canvas id="bg-canvas"></canvas>
   <div class="card">
     <div class="warning-icon">
       <i class="fas fa-ban"></i>
@@ -104,5 +124,76 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Three.js 3D Background Setup
+    const canvas = document.querySelector('#bg-canvas');
+    if (canvas) {
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x000000, 0.04);
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.position.setZ(15);
+
+      const geometry = new THREE.IcosahedronGeometry(10, 1);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x1D9BF0, wireframe: true, transparent: true, opacity: 0.15
+      });
+      const torus = new THREE.Mesh(geometry, material);
+      scene.add(torus);
+
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 300;
+      const posArray = new Float32Array(particlesCount * 3);
+      for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 60;
+      }
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05, color: 0xE7E9EA, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending
+      });
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      const windowHalfX = window.innerWidth / 2;
+      const windowHalfY = window.innerHeight / 2;
+
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+        torus.rotation.x += 0.002;
+        torus.rotation.y += 0.003;
+        torus.rotation.z += 0.001;
+        torus.position.y = Math.sin(elapsedTime * 0.5) * 1.5;
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        scene.rotation.y += 0.05 * (targetX - scene.rotation.y);
+        scene.rotation.x += 0.05 * (targetY - scene.rotation.x);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+  </script>
 </body>
+
 </html>

@@ -17,17 +17,25 @@
     }
 
     body {
-      background-color: #0B0E14;
-      background-image:
-        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.15) 0px, transparent 50%);
-      color: #E2E8F0;
+      background-color: #000000;
+      color: #E7E9EA;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0;
       padding: 20px;
+      overflow-x: hidden;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      opacity: 0.6;
     }
 
     .form-signin {
@@ -37,12 +45,9 @@
     }
 
     .card {
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      background: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 16px;
       overflow: hidden;
     }
 
@@ -61,20 +66,19 @@
       height: 48px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
     }
 
     h2 {
       font-size: 28px;
       font-weight: 700;
-      color: #F8FAFC;
+      color: #E7E9EA;
       margin-bottom: 8px;
       text-align: center;
       letter-spacing: -0.02em;
     }
 
     .subtitle {
-      color: #94A3B8;
+      color: #71767B;
       font-size: 15px;
       margin-bottom: 32px;
       text-align: center;
@@ -87,21 +91,21 @@
     }
 
     .form-control {
-      background-color: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: #F8FAFC;
+      background-color: #000000;
+      border: 1px solid #2F3336;
+      border-radius: 4px;
+      color: #E7E9EA;
       padding: 16px;
       height: 60px;
       font-size: 15px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
 
     .form-control:focus {
-      background-color: rgba(15, 23, 42, 0.8);
-      border-color: #6366F1;
-      color: #F8FAFC;
-      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      background-color: #000000;
+      border-color: #1D9BF0;
+      color: #E7E9EA;
+      box-shadow: 0 0 0 1px #1D9BF0;
     }
 
     .form-control::placeholder {
@@ -109,45 +113,43 @@
     }
 
     .form-floating>label {
-      color: #64748B;
-      font-size: 14px;
+      color: #71767B;
+      font-size: 15px;
       padding: 16px;
-      font-weight: 500;
+      font-weight: 400;
       transition: all 0.2s ease-out;
     }
 
     .form-floating>.form-control:focus~label,
     .form-floating>.form-control:not(:placeholder-shown)~label {
-      color: #818CF8;
+      color: #1D9BF0;
       transform: scale(0.85) translateY(-14px) translateX(0.15rem);
-      background: transparent;
+      background: #000000;
+      padding: 0 4px;
+      height: auto;
     }
 
     .btn-register {
-      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-      color: white;
+      background: #E7E9EA;
+      color: #0F1419;
       border: none;
-      border-radius: 12px;
+      border-radius: 9999px;
       padding: 16px;
       width: 100%;
       font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
       margin-top: 12px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.6);
+      transition: background-color 0.2s;
     }
 
     .btn-register:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 25px -10px rgba(99, 102, 241, 0.8);
+      background: #D7DBDC;
     }
 
     .btn-register:active {
-      transform: translateY(0);
+      background: #B9C0C2;
     }
 
     .links-container {
@@ -156,30 +158,29 @@
       gap: 8px;
       margin-top: 32px;
       padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
       position: relative;
       z-index: 20;
     }
 
     .links-container span {
-      color: #94A3B8;
+      color: #71767B;
       font-size: 14px;
     }
 
     .links-container a {
-      color: #A5B4FC;
+      color: #1D9BF0;
       text-decoration: none;
       font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s ease;
+      font-weight: 500;
+      transition: text-decoration 0.2s;
     }
 
     .links-container a:hover {
-      color: #C7D2FE;
+      text-decoration: underline;
     }
 
     .password-hint {
-      color: #94A3B8;
+      color: #71767B;
       font-size: 12px;
       margin-top: 8px;
       margin-left: 4px;
@@ -187,14 +188,13 @@
     }
 
     .alert {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      color: #FDE68A;
-      border-radius: 12px;
+      background: rgba(255, 212, 0, 0.1);
+      border: 1px solid rgba(255, 212, 0, 0.4);
+      color: #FFD400;
+      border-radius: 4px;
       padding: 16px;
       font-size: 14px;
       margin-bottom: 24px;
-      backdrop-filter: blur(4px);
     }
 
     .btn-close {
@@ -204,6 +204,7 @@
 </head>
 
 <body>
+  <canvas id="bg-canvas"></canvas>
   <main class="form-signin">
     <div class="card">
       <div class="card-body">
@@ -275,6 +276,89 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Three.js 3D Background Setup
+    const canvas = document.querySelector('#bg-canvas');
+    const scene = new THREE.Scene();
+
+    // Add subtle fog to blend points into the black background
+    scene.fog = new THREE.FogExp2(0x000000, 0.001);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.setZ(30);
+
+    // Create a generic organic point mesh (Starfield / Dust effect)
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1500;
+    const posArray = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount * 3; i++) {
+      // Spread particles across a wide area
+      posArray[i] = (Math.random() - 0.5) * 100;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    // Material for the particles
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      color: 0x1D9BF0, // Theme accent color
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // Mouse interaction variables
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+      mouseX = (event.clientX - windowHalfX);
+      mouseY = (event.clientY - windowHalfY);
+    });
+
+    // Animation Loop
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      // Slowly rotate the entire mesh
+      particlesMesh.rotation.y = elapsedTime * 0.05;
+      particlesMesh.rotation.x = elapsedTime * 0.02;
+
+      // Add subtle parallax effect based on mouse movement
+      targetX = mouseX * 0.001;
+      targetY = mouseY * 0.001;
+
+      particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+      particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 
 </html>

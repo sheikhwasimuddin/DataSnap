@@ -12,24 +12,26 @@
   <link href='https://fonts.googleapis.com/css?family=Inter:400,500,600,700' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js" integrity="sha256-WVsM3xrcqyuFNF3W1qtIKbHFsD0977nDQA8DCMp1zCw=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js" integrity="sha256-2/3R3NV5zryj0fDjD3cDh+SNiWQ/TJiMVZzAo5FrhiU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"
+    integrity="sha256-WVsM3xrcqyuFNF3W1qtIKbHFsD0977nDQA8DCMp1zCw=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"
+    integrity="sha256-2/3R3NV5zryj0fDjD3cDh+SNiWQ/TJiMVZzAo5FrhiU=" crossorigin="anonymous"></script>
   <title>DataSnap</title>
   <link rel="shortcut icon" href="{{url_for('static',filename='favicon.png')}}" type="image/x-icon">
 </head>
 
 <style>
-  /* Modern design system with clean color palette */
+  /* Premium Black Design System */
   :root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --accent: #ec4899;
-    --success: #10b981;
-    --background: #f8fafc;
-    --surface: #ffffff;
-    --border: #e2e8f0;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    --primary: #1D9BF0;
+    --primary-dark: #1A8CD8;
+    --accent: #F4212E;
+    --success: #00BA7C;
+    --background: #000000;
+    --surface: #000000;
+    --border: #2F3336;
+    --text-primary: #E7E9EA;
+    --text-secondary: #71767B;
   }
 
   html {
@@ -37,81 +39,95 @@
   }
 
   body {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    background-color: var(--background);
     color: var(--text-primary);
     min-height: 100vh;
     padding: 2rem 1rem;
+    overflow-x: hidden;
   }
 
-  /* Modern heading with better typography */
-  h2 {
+  /* 3D Canvas Background */
+  #bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  h2,
+  h4,
+  h5 {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 2rem;
     color: var(--text-primary);
   }
 
-  /* Modern button styling with smooth transitions */
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Minimalist Flat Buttons */
   .btn {
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 9999px;
+    font-weight: 700;
     font-size: 0.95rem;
     padding: 0.75rem 1.5rem;
     border: none;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    transition: background-color 0.2s;
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .btn-info {
+    background-color: var(--text-primary);
+    color: var(--background);
+  }
+
+  .btn-info:hover {
+    background-color: #D7DBDC;
+    color: var(--background);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+  }
+
+  .btn-primary {
     background-color: var(--primary);
     color: white;
   }
 
-  .btn-info:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-  }
-
-  .btn-secondary {
-    background-color: var(--text-secondary);
-    color: white;
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--text-primary);
-  }
-
-  .btn-primary {
-    background-color: var(--success);
-    color: white;
-  }
-
   .btn-primary:hover {
-    background-color: #059669;
+    background-color: var(--primary-dark);
   }
 
-  /* Remove old neumorphic styling, use modern flat design */
-  .contri {
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
+  .contri,
   .contri_btn {
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+    border-radius: 9999px;
+    box-shadow: none;
   }
 
-  /* Modern input styling */
+  /* Minimalist Inputs */
   .form-control,
   .form-select {
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    border: 1px solid var(--border);
     padding: 0.875rem 1rem;
     font-size: 0.95rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s;
     background-color: var(--surface);
     color: var(--text-primary);
   }
@@ -119,15 +135,24 @@
   .form-control:focus,
   .form-select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 1px var(--primary);
+    background-color: var(--surface);
+    color: var(--text-primary);
+    outline: none;
   }
 
-  /* Modern input group styling */
+  .form-control:disabled,
+  .form-control[readonly] {
+    background-color: #16181C;
+    opacity: 1;
+  }
+
+  /* Input Groups */
   .input-group-text {
-    background-color: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
+    background-color: #16181C;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
     font-weight: 600;
     padding: 0.875rem 1rem;
   }
@@ -140,101 +165,118 @@
     font-weight: 600;
     color: var(--text-primary);
     background-color: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.2s;
   }
 
-  /* Modern input group layout */
   .input-group {
     gap: 0.75rem;
     margin-bottom: 1.5rem;
   }
 
-  .input-group > .form-control {
+  .input-group>.form-control {
     flex: 1;
   }
 
-  /* Modern icon styling */
+  /* Icons */
   .fa-times-circle,
   .fa-plus-circle {
-    color: var(--primary);
-    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    transition: color 0.2s;
     cursor: pointer;
     font-size: 1.5rem !important;
   }
 
   .fa-times-circle:hover {
     color: var(--accent);
-    transform: scale(1.1);
+    transform: none;
   }
 
   .fa-plus-circle:hover {
-    color: var(--success);
-    transform: scale(1.1);
+    color: var(--text-primary);
+    transform: none;
   }
 
-  /* Modern modal styling */
-  .modal-content {
-    border-radius: 12px;
-    border: 1.5px solid var(--border);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  }
-
-  .modal-header {
+  /* Modals & Offcanvas */
+  .modal-content,
+  .offcanvas {
     background-color: var(--background);
-    border-bottom: 1.5px solid var(--border);
-    border-radius: 12px 12px 0 0;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    color: var(--text-primary);
+  }
+
+  .modal-header,
+  .offcanvas-header {
+    background-color: var(--background);
+    border-bottom: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
     padding: 1.5rem;
   }
 
-  .modal-title {
+  .modal-title,
+  .offcanvas-title {
     font-weight: 700;
     color: var(--text-primary);
     font-size: 1.25rem;
   }
 
-  .modal-body {
+  .modal-body,
+  .offcanvas-body {
     padding: 1.5rem;
   }
 
   .modal-footer {
-    border-top: 1.5px solid var(--border);
+    border-top: 1px solid var(--border);
     padding: 1.5rem;
     background-color: var(--background);
   }
 
-  /* Modern badge styling */
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 0.5;
+  }
+
+  .btn-close:hover {
+    opacity: 1;
+  }
+
+  /* Badges */
   .badge {
     padding: 0.5rem 0.875rem;
     font-size: 0.875rem;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: 4px;
   }
 
   .badge.bg-primary {
-    background-color: var(--primary) !important;
-    color: white;
+    background-color: #16181C !important;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
   }
 
-  .bg-info {
-    background-color: var(--primary) !important;
+  .badge .fa-times-circle {
+    font-size: 1rem !important;
+    margin-left: 8px !important;
   }
 
-  /* Modern table styling */
+  /* Tables */
   .table {
     border-collapse: separate;
     border-spacing: 0;
+    color: var(--text-primary);
   }
 
   .table-bordered {
-    border: 1.5px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
   }
 
   .table-bordered thead {
-    background-color: var(--background);
+    background-color: #16181C;
   }
 
   .table-bordered th {
@@ -250,13 +292,14 @@
     color: var(--text-secondary);
   }
 
-  /* Modern form check styling */
+  /* Checkboxes/Switches */
   .form-check-input {
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid var(--border);
+    background-color: transparent;
+    border: 2px solid var(--text-secondary);
     border-radius: 4px;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
   }
 
   .form-check-input:checked {
@@ -266,16 +309,29 @@
 
   .form-check-input:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 1px var(--primary);
+    background-color: transparent;
+  }
+
+  .form-check-input:checked:focus {
+    background-color: var(--primary);
   }
 
   .form-check-label {
-    font-weight: 500;
+    font-weight: 400;
     color: var(--text-primary);
     margin-left: 0.5rem;
   }
 
-  /* Modern container spacing */
+  .form-switch .form-check-input {
+    background-color: var(--text-secondary);
+    border: none;
+  }
+
+  .form-switch .form-check-input:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23000'/%3e%3c/svg%3e");
+  }
+
   .container {
     max-width: 800px;
   }
@@ -284,7 +340,6 @@
     gap: 1rem;
   }
 
-  /* Responsive spacing */
   @media (max-width: 768px) {
     h2 {
       font-size: 1.5rem;
@@ -308,19 +363,29 @@
 </style>
 
 <body>
+  <canvas id="bg-canvas"></canvas>
   {% macro catch(on_exception) %}
   {{ handle_catch(caller, on_exception) }}
   {% endmacro %}
   <div>
-    <h2 class="text-center"><img src="{{url_for('static',filename='favicon.png')}}" alt="" height="50" style="margin-right: 1rem;"> {{form_data['form_title']}} <img src="{{url_for('static',filename='favicon.png')}}" alt="" height="50" style="margin-left: 1rem;"></h2>
-    
+    <h2 class="text-center"><img src="{{url_for('static',filename='favicon.png')}}" alt="" height="50"
+        style="margin-right: 1rem;"> {{form_data['form_title']}} <img src="{{url_for('static',filename='favicon.png')}}"
+        alt="" height="50" style="margin-left: 1rem;"></h2>
+    <div class="row mb-4">
+      <div class="col-md-8 mx-auto">
+        <textarea id="form_desc_input" class="form-control" placeholder="Form Description" rows="2"
+          style="background:transparent; color:var(--text-secondary); border-color:var(--border); text-align:center;">{{ form_data.get('form_desc', '') }}</textarea>
+      </div>
+    </div>
+
     <!-- Button trigger modal -->
     <div class="row my-4">
       <div class="col">
-        <button type="button" class="btn btn-info mx-2 contri_btn" data-bs-toggle="modal" data-bs-target="#Add_Field_Modal">
+        <button type="button" class="btn btn-info mx-2 contri_btn" data-bs-toggle="modal"
+          data-bs-target="#Add_Field_Modal">
           <i class="fa fa-plus mx-1"></i> CREATE NEW FIELD
         </button>
-      
+
         <a type="button" class="btn btn-info mx-2 contri_btn" href="/">
           <i class="fa fa-arrow-left mx-1"></i> BACK
         </a>
@@ -328,18 +393,21 @@
         <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" onclick="Save()">
           SAVE <i class="fa fa-cloud-download mx-2"></i>
         </button>
-       
-        <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal" data-bs-target="#Properties_Modal">
+
+        <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal"
+          data-bs-target="#Properties_Modal">
           <i class="fa fa-sliders-h mx-1"></i> PROPS
         </button>
-        
-        <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal" data-bs-target="#Details_Modal">
+
+        <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal"
+          data-bs-target="#Details_Modal">
           <i class="fa fa-info-circle mx-1"></i> DETAILS
         </button>
       </div>
 
 
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="Responses_Modal" aria-labelledby="offcanvasExampleLabel" style="width:100%">
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="Responses_Modal" aria-labelledby="offcanvasExampleLabel"
+        style="width:100%">
         <div class="offcanvas-header">
           <h4 class="offcanvas-title" id="offcanvasExampleLabel">Responses</h4>
           <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -354,19 +422,19 @@
                   {% for _key,_val in val.items()%}
                   <th scope="col">{{_val["key"]}}</th>
                   {% endfor %}
-                  
+
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   {% for _key,_val in val.items()%}
-                  <th >{{_val["resp"]}}</th>
+                  <th>{{_val["resp"]}}</th>
                   {% endfor %}
-                
-               
+
+
                 </tr>
-                
-                
+
+
               </tbody>
             </table>
             {% endfor %}
@@ -397,12 +465,12 @@
             <div class="modal-body">
               <div class="form-check form-switch">
                 {% if form_data['accepting_response']== 0 %}
-                <input class="form-check-input" type="checkbox" role="switch" id="form_accepting_response" >
+                <input class="form-check-input" type="checkbox" role="switch" id="form_accepting_response">
                 {% else %}
-                <input class="form-check-input" type="checkbox" role="switch" id="form_accepting_response" checked >
+                <input class="form-check-input" type="checkbox" role="switch" id="form_accepting_response" checked>
                 {% endif %}
                 <label class="form-check-label" for="flexSwitchCheckChecked">Accepting Responses</label>
-  
+
 
               </div>
               <!-- <div class="form-check form-switch">
@@ -425,14 +493,15 @@
       </div>
 
 
-      <div class="modal fade" id="Properties_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="Properties_Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Field Properties</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body">
               <div class="row" id="Properties_Fields">
                 {% call catch('') %}
@@ -443,9 +512,10 @@
                   <input type="text" class="form-control" value="{{val['text']}}" disabled>
                 </div>
                 <div class="col-auto">
-                  
+
                   <div class="form-check form-switch my-2">
-                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_{{key}}" checked>
+                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch"
+                      id="Required_{{key}}" checked>
                     <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
                   </div>
                 </div>
@@ -454,9 +524,10 @@
                   <input type="text" class="form-control" value="{{val['text']}}" disabled>
                 </div>
                 <div class="col-auto">
-                  
+
                   <div class="form-check form-switch my-2">
-                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_{{key}}" >
+                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch"
+                      id="Required_{{key}}">
                     <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
                   </div>
                 </div>
@@ -464,11 +535,12 @@
                 {% endif %}
                 {% endfor %}
                 {% endcall %}
-               
+
               </div>
             </div>
             <div class="modal-footer">
-              <p style="color:#ec4899; font-size: 0.875rem;"><i class="fa fa-info-circle mx-1"></i>Refresh if field appears empty</p>
+              <p style="color:#ec4899; font-size: 0.875rem;"><i class="fa fa-info-circle mx-1"></i>Refresh if field
+                appears empty</p>
             </div>
           </div>
         </div>
@@ -491,15 +563,27 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="email_field" >
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="email_field">
                 <label class="form-check-label" for="flexRadioDefault1">
                   Email Field
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="select_field" >
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="select_field">
                 <label class="form-check-label" for="flexRadioDefault2">
                   Select Field
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio_field">
+                <label class="form-check-label" for="flexRadioDefault3">
+                  Multiple Choice (Radio Buttons)
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="checkbox_field">
+                <label class="form-check-label" for="flexRadioDefault4">
+                  Checkboxes (Multiple Select)
                 </label>
               </div>
             </div>
@@ -516,94 +600,132 @@
 
 
 
-  <div class="modal fade" id="Details_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Form Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3" id="Details_Modal_Body">
-          <label for="exampleFormControlInput1" class="form-label">Public URL</label>
-          <button class="btn btn-sm btn-info contri_btn my-1" style="float:right" onclick="Copy_Clip()"><i class="fa fa-copy mx-1"></i>Copy Link</button>
-          <!-- {% if not form_data['short-url']%}
+      <div class="modal fade" id="Details_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Form Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3" id="Details_Modal_Body">
+                <label for="exampleFormControlInput1" class="form-label">Public URL</label>
+                <button class="btn btn-sm btn-info contri_btn my-1" style="float:right" onclick="Copy_Clip()"><i
+                    class="fa fa-copy mx-1"></i>Copy Link</button>
+                <!-- {% if not form_data['short-url']%}
           <button class="btn-sm btn-info contri_btn fnt m-1" id="short-url-button" style="float:right" onclick="Shorten_Url()">Shorten Url</button>
           {% endif %} -->
-          <input type="text" class="form-control" id="public_url_form"  disabled>
-          {% if form_data['short-url']%}
-          <!-- <label for="exampleFormControlInput1" class="form-label">Shortened URL</label> -->
-          <input type="text" class="form-control" id="shortened_public_url_form" value="{{form_data['short-url']}}" disabled>
-          {% endif %}
-  
+                <input type="text" class="form-control" id="public_url_form" disabled>
+                {% if form_data['short-url']%}
+                <!-- <label for="exampleFormControlInput1" class="form-label">Shortened URL</label> -->
+                <input type="text" class="form-control" id="shortened_public_url_form"
+                  value="{{form_data['short-url']}}" disabled>
+                {% endif %}
 
-        </div>
-    
-      <div class="row my-5">
-        <div class="col">
-          <div class="row">
 
-            <button type="button" class="btn btn-info contri_btn my-2" data-bs-toggle="modal" data-bs-target="#Settings_Modal" data-bs-dismiss="modal">
-              <i class="fa fa-cog mx-1"></i> SETTINGS
-             </button>
-          </div>
-          <div class="row">
+              </div>
 
-            <button type="button" class="btn btn-info contri_btn px-4 my-2"  data-bs-toggle="offcanvas" data-bs-target="#Responses_Modal" data-bs-dismiss="modal">
-             <i class="fa fa-comments mx-1"></i> RESPONSES
-            </button>
-          </div>
-        </div>
-      </div>
-        
-      </div>
-      <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <div class="row my-5">
+                <div class="col">
+                  <div class="row">
+
+                    <button type="button" class="btn btn-info contri_btn my-2" data-bs-toggle="modal"
+                      data-bs-target="#Settings_Modal" data-bs-dismiss="modal">
+                      <i class="fa fa-cog mx-1"></i> SETTINGS
+                    </button>
+                  </div>
+                  <div class="row">
+
+                    <button type="button" class="btn btn-info contri_btn px-4 my-2" data-bs-toggle="offcanvas"
+                      data-bs-target="#Responses_Modal" data-bs-dismiss="modal">
+                      <i class="fa fa-comments mx-1"></i> RESPONSES
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-info">Save changes</button> -->
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
     </div>
-  <div class="container" id="main_form">
-    {% call catch('') %}
-    {% for key,val in form_data['data'].items()%}
-    {% if val != "timestamp" %}
-    {% if val['type'] == 'text' or val['type'] == 'email'%}
-    <div class="input-group my-2" id="{{key}}">
-      {% if val['type'] == 'email' %}
+    <div class="container" id="main_form">
+      {% call catch('') %}
+      {% for key,val in form_data['data'].items()%}
+      {% if val != "timestamp" %}
+      {% if val['type'] == 'text' or val['type'] == 'email'%}
+      <div class="input-group my-2" id="{{key}}">
+        {% if val['type'] == 'email' %}
         <input class="input-group-text mx-2" value="{{val['text']}}" disabled>
         {% else %}
         <input class="input-group-text mx-2" value="{{val['text']}}">
         {% endif %}
-        <input type="text"  class="form-control" disabled>
-        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('{{key}}')"></i>
+        <input type="text" class="form-control" disabled>
+        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
 
 
       </div>
-      {% else %}
-
-
-
-
-
+      {% elif val['type'] == 'select' %}
       <div class="input-group my-2" id="{{key}}">
         <input class="input-group-text mx-2" value="{{val['text']}}">
-        <select name="" id="{{key}}_select" class="form-control">
-            <option value="Options" default> Option List</option>
+        <select name="" id="{{key}}_select" class="form-control" disabled>
+          <option value="Options" default> Option List (Select)</option>
           {% for key_opt,opt in val['options'].items()%}
           <option value="{{key_opt}}">{{opt}}</option>
           {% endfor %}
         </select>
-        <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#{{key}}_Options_Modal"></i>
-        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('{{key}}')"></i>
-
+        <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
+          data-bs-target="#{{key}}_Options_Modal"></i>
+        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
       </div>
 
+      {% elif val['type'] == 'radio' %}
+      <div class="input-group my-2" id="{{key}}">
+        <input class="input-group-select mx-2" value="{{val['text']}}">
+        <div id="{{key}}_select" class="form-control"
+          style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
+          {% for key_opt,opt in val['options'].items()%}
+          <div class="form-check" id="opt_{{key_opt}}">
+            <input class="form-check-input" type="radio" name="preview_{{key}}" disabled>
+            <label class="form-check-label" style="color:var(--text-primary);">{{opt}}</label>
+          </div>
+          {% else %}
+          <span style="color:var(--text-secondary); font-size:0.9rem;">(Multiple Choice Options)</span>
+          {% endfor %}
+        </div>
+        <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
+          data-bs-target="#{{key}}_Options_Modal"></i>
+        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
+      </div>
 
+      {% elif val['type'] == 'checkbox' %}
+      <div class="input-group my-2" id="{{key}}">
+        <input class="input-group-select mx-2" value="{{val['text']}}">
+        <div id="{{key}}_select" class="form-control"
+          style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
+          {% for key_opt,opt in val['options'].items()%}
+          <div class="form-check" id="opt_{{key_opt}}">
+            <input class="form-check-input" type="checkbox" disabled>
+            <label class="form-check-label" style="color:var(--text-primary);">{{opt}}</label>
+          </div>
+          {% else %}
+          <span style="color:var(--text-secondary); font-size:0.9rem;">(Checkbox Options)</span>
+          {% endfor %}
+        </div>
+        <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
+          data-bs-target="#{{key}}_Options_Modal"></i>
+        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
+      </div>
+      {% endif %}
 
-      <div class="modal fade" id="{{key}}_Options_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {% if val['type'] in ['select', 'radio', 'checkbox'] %}
+      <div class="modal fade" id="{{key}}_Options_Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -618,29 +740,20 @@
               <div class="row">
                 <div class="col" id="{{key}}_all_options">
                   {% for key_opt,opt in val['options'].items()%}
-                  <span class="badge rounded-pill bg-primary my-1" id="{{key_opt}}" >{{opt}}<i class="fa fa-times-circle  mx-1" style="cursor:pointer" onclick = "Remove_Option('{{key}}','{{key_opt}}')"></i></span>
+                  <span class="badge rounded-pill bg-primary my-1" id="{{key_opt}}">{{opt}}<i
+                      class="fa fa-times-circle  mx-1" style="cursor:pointer"
+                      onclick="Remove_Option('{{key}}','{{key_opt}}')"></i></span>
                   {% endfor %}
-
-      
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary"  onclick = "Add_Option('{{key}}')">Add Option</button>
+              <button type="button" class="btn btn-primary" onclick="Add_Option('{{key}}')">Add Option</button>
             </div>
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
       {% endif %}
       {% endif %}
       {% endfor %}
@@ -649,7 +762,7 @@
 
 
 
-    
+
 
 
 
@@ -657,13 +770,13 @@
 
 
   </div>
-    </div>
+  </div>
 
-    <!-- Modal -->
+  <!-- Modal -->
 
-  
-    <script>
-   function Copy_Clip() {
+
+  <script>
+    function Copy_Clip() {
       var copyText = document.getElementById("public_url_form");
       copyText.select();
       copyText.setSelectionRange(0, 99999);
@@ -680,46 +793,46 @@
         console.error('Failed to query clipboard permissions: ', error);
       });
     }
-   
-      var main_json = "{{form_data['data']}}"
-      var all_json_unparsed = decodeHtml(main_json.slice(1,main_json.length-1))
-       all_json_unparsed = "{"+all_json_unparsed+"}"
-       all_json_parsed = JSON.parse(all_json_unparsed.replaceAll("'", '"'))
 
-      var data
-       = all_json_parsed
+    var main_json = "{{form_data['data']}}"
+    var all_json_unparsed = decodeHtml(main_json.slice(1, main_json.length - 1))
+    all_json_unparsed = "{" + all_json_unparsed + "}"
+    all_json_parsed = JSON.parse(all_json_unparsed.replaceAll("'", '"'))
 
-      all_input_group_text = document.getElementsByClassName("input-group-text")
-        if(all_input_group_text.length!=0){
-          for(let i=0;i<all_input_group_text.length;i++){
-            let temp_elem =all_input_group_text[i]
-            temp_elem.addEventListener("input",function(){
-             
-               let parent_id  = temp_elem.parentElement.id
-               data[parent_id]['text'] = temp_elem.value
-             
-               temp_elem.setAttribute("value",temp_elem.value)
-            })
-          }
-        }
+    var data
+      = all_json_parsed
 
-    
-     
+    all_input_group_text = document.getElementsByClassName("input-group-text")
+    if (all_input_group_text.length != 0) {
+      for (let i = 0; i < all_input_group_text.length; i++) {
+        let temp_elem = all_input_group_text[i]
+        temp_elem.addEventListener("input", function () {
+
+          let parent_id = temp_elem.parentElement.id
+          data[parent_id]['text'] = temp_elem.value
+
+          temp_elem.setAttribute("value", temp_elem.value)
+        })
+      }
+    }
 
 
-      function Add_Field() {
-      if(document.getElementById("text_field").checked){
 
-        let uid_field =makeid(7)
-      let container = document.getElementById("main_form")
-      let Properties_Fields = document.getElementById("Properties_Fields")
-      container.innerHTML+=` <div class="input-group my-2" id="${uid_field}">
+
+
+    function Add_Field() {
+      if (document.getElementById("text_field").checked) {
+
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        let Properties_Fields = document.getElementById("Properties_Fields")
+        container.innerHTML += ` <div class="input-group my-2" id="${uid_field}">
         <input class="input-group-text mx-2">
           <input type="text"  class="form-control" disabled>
           <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
   
       </div> `
-        Properties_Fields.innerHTML+=`<div class="col-auto" id="div_props_${uid_field}">
+        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
           <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
         </div>
         <div class="col-auto">
@@ -735,33 +848,33 @@
         data[uid_field]['type'] = "text"
 
         all_input_group_text = document.getElementsByClassName("input-group-text")
-        if(all_input_group_text.length!=0){
-          for(let i=0;i<all_input_group_text.length;i++){
-            let temp_elem =all_input_group_text[i]
-            temp_elem.addEventListener("input",function(){
-               let parent_id  = temp_elem.parentElement.id
-               data[parent_id]['text'] = temp_elem.value
-               document.getElementById("props_"+parent_id).value = temp_elem.value
-             
-               temp_elem.setAttribute("value",temp_elem.value)
+        if (all_input_group_text.length != 0) {
+          for (let i = 0; i < all_input_group_text.length; i++) {
+            let temp_elem = all_input_group_text[i]
+            temp_elem.addEventListener("input", function () {
+              let parent_id = temp_elem.parentElement.id
+              data[parent_id]['text'] = temp_elem.value
+              document.getElementById("props_" + parent_id).value = temp_elem.value
+
+              temp_elem.setAttribute("value", temp_elem.value)
             })
           }
         }
-         
+
       }
 
-      else if(document.getElementById("email_field").checked){
+      else if (document.getElementById("email_field").checked) {
 
-        let uid_field =makeid(7)
-      let container = document.getElementById("main_form")
-      let Properties_Fields = document.getElementById("Properties_Fields")
-      container.innerHTML+=` <div class="input-group my-2" id="${uid_field}">
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        let Properties_Fields = document.getElementById("Properties_Fields")
+        container.innerHTML += ` <div class="input-group my-2" id="${uid_field}">
         <input class="input-group-text mx-2" value="Email" disabled>
           <input type="email"  class="form-control" disabled>
           <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
   
       </div> `
-        Properties_Fields.innerHTML+=`<div class="col-auto" id="div_props_${uid_field}">
+        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
           <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
         </div>
         <div class="col-auto">
@@ -778,43 +891,41 @@
         data[uid_field]['text'] = "Email"
 
         all_input_group_text = document.getElementsByClassName("input-group-text")
-        if(all_input_group_text.length!=0){
-          for(let i=0;i<all_input_group_text.length;i++){
-            let temp_elem =all_input_group_text[i]
-            temp_elem.addEventListener("input",function(){
-          
-               let parent_id  = temp_elem.parentElement.id
-               data[parent_id]['text'] = temp_elem.value
-             
-               temp_elem.setAttribute("value",temp_elem.value)
+        if (all_input_group_text.length != 0) {
+          for (let i = 0; i < all_input_group_text.length; i++) {
+            let temp_elem = all_input_group_text[i]
+            temp_elem.addEventListener("input", function () {
+
+              let parent_id = temp_elem.parentElement.id
+              data[parent_id]['text'] = temp_elem.value
+
+              temp_elem.setAttribute("value", temp_elem.value)
             })
           }
         }
-         
+
       }
 
-        else{
-        
-
-          let uid_field =makeid(7)
-          let container = document.getElementById("main_form")
-          let Properties_Fields = document.getElementById("Properties_Fields")
-          container.innerHTML+=`    <div class="input-group my-2" id="${uid_field}">
-            <input class="input-group-select mx-2" >
-            <select name="" id="${uid_field}_select" class="form-control">
-             <option value="Options" default> Option List</option>
-            </select>
+      else if (document.getElementById("radio_field").checked) {
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        let Properties_Fields = document.getElementById("Properties_Fields")
+        container.innerHTML += `    <div class="input-group my-2" id="${uid_field}">
+            <input class="input-group-select mx-2" value="Multiple Choice">
+            <div id="${uid_field}_select" class="form-control" style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
+             <!-- Options will mount here -->
+             <span style="color:var(--text-secondary); font-size:0.9rem;">(Multiple Choice Options)</span>
+            </div>
             <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#Options_Modal_${uid_field}"></i>
-            <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
+            <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('${uid_field}')"></i>
     
           </div>
-          
           
           <div class="modal fade" id="Options_Modal_${uid_field}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Manage Options</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Manage Radio Options</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -830,134 +941,194 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary"  onclick = "Add_Option('${uid_field}')">Add Option</button>
+                  <button type="button" class="btn btn-primary" onclick="Add_Option('${uid_field}')">Add Option</button>
                 </div>
               </div>
             </div>
           </div>`
-    Properties_Fields.innerHTML+=`<div class="col-auto" id="div_props_${uid_field}">
+
+        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
       <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
     </div>
     <div class="col-auto">
-      
       <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
         <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
         <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
       </div>
     </div>`
 
-    data[uid_field] = {
+        data[uid_field] = {}
+        data[uid_field]['type'] = "radio"
+        data[uid_field]['text'] = "Multiple Choice"
+        data[uid_field]['options'] = {}
 
-    }
-    data[uid_field]['type'] = "select"
-    data[uid_field]['options'] = {
-
-    }
-
-    all_input_group_select = document.getElementsByClassName("input-group-select")
-    if(all_input_group_select.length!=0){
-      for(let i=0;i<all_input_group_select.length;i++){
-        let temp_elem =all_input_group_select[i]
-        temp_elem.addEventListener("input",function(){
-         
-           let parent_id  = temp_elem.parentElement.id
-           data[parent_id]['text'] = temp_elem.value
-         
-           temp_elem.setAttribute("value",temp_elem.value)
-        })
+        attachInputListeners()
       }
-    }
-    all_input_group_text = document.getElementsByClassName("input-group-text")
-        if(all_input_group_text.length!=0){
-          for(let i=0;i<all_input_group_text.length;i++){
-            let temp_elem =all_input_group_text[i]
-            temp_elem.addEventListener("input",function(){
+
+      else if (document.getElementById("checkbox_field").checked) {
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        let Properties_Fields = document.getElementById("Properties_Fields")
+        container.innerHTML += `    <div class="input-group my-2" id="${uid_field}">
+            <input class="input-group-select mx-2" value="Checkboxes">
+            <div id="${uid_field}_select" class="form-control" style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
+             <!-- Options will mount here -->
+             <span style="color:var(--text-secondary); font-size:0.9rem;">(Checkbox Options)</span>
+            </div>
+            <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#Options_Modal_${uid_field}"></i>
+            <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('${uid_field}')"></i>
+    
+          </div>
           
-               let parent_id  = temp_elem.parentElement.id
-               data[parent_id]['text'] = temp_elem.value
-             
-               temp_elem.setAttribute("value",temp_elem.value)
+          <div class="modal fade" id="Options_Modal_${uid_field}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Manage Checkbox Options</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Add New Option</label>
+                    <input type="text" class="form-control" id="${uid_field}_option_add" placeholder="Write option">
+                  </div>
+                  <div class="row">
+                    <div class="col" id="${uid_field}_all_options">
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="Add_Option('${uid_field}')">Add Option</button>
+                </div>
+              </div>
+            </div>
+          </div>`
+
+        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
+      <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
+    </div>
+    <div class="col-auto">
+      <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
+        <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
+        <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
+      </div>
+    </div>`
+
+        data[uid_field] = {}
+        data[uid_field]['type'] = "checkbox"
+        data[uid_field]['text'] = "Checkboxes"
+        data[uid_field]['options'] = {}
+
+        attachInputListeners()
+      }
+
+      function attachInputListeners() {
+        all_input_group_select = document.getElementsByClassName("input-group-select")
+        if (all_input_group_select.length != 0) {
+          for (let i = 0; i < all_input_group_select.length; i++) {
+            let temp_elem = all_input_group_select[i]
+            temp_elem.addEventListener("input", function () {
+              let parent_id = temp_elem.parentElement.id
+              data[parent_id]['text'] = temp_elem.value
+              temp_elem.setAttribute("value", temp_elem.value)
             })
           }
         }
-
+        all_input_group_text = document.getElementsByClassName("input-group-text")
+        if (all_input_group_text.length != 0) {
+          for (let i = 0; i < all_input_group_text.length; i++) {
+            let temp_elem = all_input_group_text[i]
+            temp_elem.addEventListener("input", function () {
+              let parent_id = temp_elem.parentElement.id
+              data[parent_id]['text'] = temp_elem.value
+              temp_elem.setAttribute("value", temp_elem.value)
+            })
+          }
         }
-
-
-
       }
-      function Remove_Field(id){
-            document.getElementById(id).remove()
-            // document.getElementById("div_props_"+id).remove()
-            // document.getElementById("div_input_props_"+id).remove()
-            delete data[id]
+
+
+
+    }
+    function Remove_Field(id) {
+      document.getElementById(id).remove()
+      // document.getElementById("div_props_"+id).remove()
+      // document.getElementById("div_input_props_"+id).remove()
+      delete data[id]
+    }
+
+    function Save() {
+      let param = JSON.stringify(data)
+      let formDesc = "";
+      if (document.getElementById("form_desc_input")) {
+        formDesc = document.getElementById("form_desc_input").value;
       }
-   
-      function Save(){
-        let param = JSON.stringify(data)
+      $.ajax({
+        url: "{{form_data['callback_url']}}",
+        type: 'POST',
+        data: {
+          "main": param,
+          "form_desc": formDesc
+        },
+      }).done(function (data) {
+        // alert("Form Saved")
+        window.location.reload()
+      }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log(XMLHttpRequest);
+        alert("error");
+      })
+    }
+    function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+    }
+    function makeid(length) {
+      var result = '';
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+          charactersLength));
+      }
+      return result;
+    }
+
+    document.getElementById("public_url_form").value = window.location.origin + "{{form_data['public_url']}}"
+    document.getElementById("public_url_form").setAttribute("value", window.location.origin + "{{form_data['public_url']}}")
+    document.getElementById("form_accepting_response").addEventListener('change', function (e) {
+      if (this.checked) {
         $.ajax({
-          url: "{{form_data['callback_url']}}",
-          type:'POST',
-          data:{
-            "main":param
-          },
-        }).done(function(data) {
-            // alert("Form Saved")
-            window.location.reload()
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest);
-            alert("error");
+          url: "{{form_data['callback_url']}}" + "/change-resp-code",
+          type: 'POST',
+          data: {
+            'resp_code': 1,
+            'name': 0
+          }
+        }).done(function (data) {
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+          console.log(XMLHttpRequest);
+          alert("error");
         })
       }
-      function decodeHtml(html) {
-        var txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-    }
-      function makeid(length) {
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-          result += characters.charAt(Math.floor(Math.random() * 
-     charactersLength));
-       }
-       return result;
-    }
+      else {
+        $.ajax({
+          url: "{{form_data['callback_url']}}" + "/change-resp-code",
+          type: 'POST',
+          data: {
+            'resp_code': 0,
+            'name': 0
+          }
+        }).done(function (data) {
 
-    document.getElementById("public_url_form").value = window.location.origin+"{{form_data['public_url']}}"
-    document.getElementById("public_url_form").setAttribute("value", window.location.origin+"{{form_data['public_url']}}")
-    document.getElementById("form_accepting_response").addEventListener('change',function(e){
-        if(this.checked){
-          $.ajax({
-            url: "{{form_data['callback_url']}}"+"/change-resp-code",
-            type:'POST',
-            data:{
-              'resp_code':1,
-              'name':0
-            }
-          }).done(function(data) {
-             
-          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-              console.log(XMLHttpRequest);
-              alert("error");
-          })
-        }
-        else{
-          $.ajax({
-            url: "{{form_data['callback_url']}}"+"/change-resp-code",
-            type:'POST',
-            data:{
-              'resp_code':0,
-              'name':0
-            }
-          }).done(function(data) {
-       
-          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-              console.log(XMLHttpRequest);
-              alert("error");
-          })
-        }
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+          console.log(XMLHttpRequest);
+          alert("error");
+        })
+      }
     })
 
     // document.getElementById("form_admin_notify_new_responses").addEventListener('change',function(e){
@@ -970,7 +1141,7 @@
     //           'name':1
     //         }
     //       }).done(function(data) {
-             
+
     //       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
     //           console.log(XMLHttpRequest);
     //           alert("error");
@@ -985,7 +1156,7 @@
     //           'name':1
     //         }
     //       }).done(function(data) {
-       
+
     //       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
     //           console.log(XMLHttpRequest);
     //           alert("error");
@@ -993,71 +1164,97 @@
     //     }
     // })
 
-   console.log("___MBSA____")
-   all_required_checkboxes = document.getElementsByClassName("required_checkboxes_fields")
-   for(let i =0;i<all_required_checkboxes.length;i++){
-    all_required_checkboxes[i].addEventListener('change',function(e){
-      if(this.checked){
-           let temp_id = this.id.split('_')[1]
-           data[temp_id]['required'] = "true"
-      }
-      else{
-        let temp_id = this.id.split('_')[1]
-        data[temp_id]['required'] = "false"
-      }
-    })
-   }
-  
+    console.log("___MBSA____")
+    all_required_checkboxes = document.getElementsByClassName("required_checkboxes_fields")
+    for (let i = 0; i < all_required_checkboxes.length; i++) {
+      all_required_checkboxes[i].addEventListener('change', function (e) {
+        if (this.checked) {
+          let temp_id = this.id.split('_')[1]
+          data[temp_id]['required'] = "true"
+        }
+        else {
+          let temp_id = this.id.split('_')[1]
+          data[temp_id]['required'] = "false"
+        }
+      })
+    }
 
 
-    function Add_Option(id){
+
+    function Add_Option(id) {
       let opt_id = makeid(7)
-      let text = document.getElementById(id+"_option_add").value
-      document.getElementById(id+"_all_options").innerHTML += `
+      let text = document.getElementById(id + "_option_add").value
+      if (!text) return; // Don't add empty options
+
+      document.getElementById(id + "_all_options").innerHTML += `
       <span class="badge rounded-pill bg-primary my-1" id="${opt_id}">${text} <i class="fa fa-times-circle  mx-1" style="cursor:pointer" onclick = "Remove_Option('${id}','${opt_id}')"></i></span>
       `
-      document.getElementById(id+"_option_add").value = ""
-      let x = document.getElementById(id+"_select");
-      let option = document.createElement("option");
-      option.text = text
-      option.value = opt_id
-      x.add(option);
+      document.getElementById(id + "_option_add").value = ""
+
+      let field_type = data[id]['type']
+
+      if (field_type === 'select') {
+        let x = document.getElementById(id + "_select");
+        let option = document.createElement("option");
+        option.text = text
+        option.value = opt_id
+        option.id = "opt_" + opt_id
+        x.add(option);
+      } else if (field_type === 'radio') {
+        let select_elem = document.getElementById(id + "_select")
+        let placeholder = select_elem.querySelector('span');
+        if (placeholder) placeholder.remove();
+
+        select_elem.innerHTML += `
+          <div class="form-check" id="opt_${opt_id}">
+            <input class="form-check-input" type="radio" name="preview_${id}" disabled>
+            <label class="form-check-label" style="color:var(--text-primary);">${text}</label>
+          </div>`
+      } else if (field_type === 'checkbox') {
+        let select_elem = document.getElementById(id + "_select")
+        let placeholder = select_elem.querySelector('span');
+        if (placeholder) placeholder.remove();
+
+        select_elem.innerHTML += `
+          <div class="form-check" id="opt_${opt_id}">
+            <input class="form-check-input" type="checkbox" disabled>
+            <label class="form-check-label" style="color:var(--text-primary);">${text}</label>
+          </div>`
+      }
 
       data[id]['options'][opt_id] = text
-
-     
     }
-    function Remove_Option(id,opt_id){
+    function Remove_Option(id, opt_id) {
       document.getElementById(opt_id).remove()
-      let x = document.getElementById(id+"_select");
-      for(let i=0;i<x.length;i++){
-        if(x[i].value == opt_id){
+      let x = document.getElementById(id + "_select");
+      for (let i = 0; i < x.length; i++) {
+        if (x[i].value == opt_id) {
           x.remove(i)
           delete data[id]['options'][opt_id]
         }
       }
 
     }
-    function Shorten_Url(){
+    function Shorten_Url() {
       public_url_form = document.getElementById("public_url_form").value
       $.ajax({
-        url: "{{form_data['callback_url']}}"+"/shorten-url",
-        type:'POST',
-        data:{
-          'public_url_form':public_url_form
+        url: "{{form_data['callback_url']}}" + "/shorten-url",
+        type: 'POST',
+        data: {
+          'public_url_form': public_url_form
         }
-       
-      }).done(function(data) {
-        document.getElementById("Details_Modal_Body").innerHTML+=`<label for="exampleFormControlInput1" class="form-label">Shortened URL</label>
+
+      }).done(function (data) {
+        document.getElementById("Details_Modal_Body").innerHTML += `<label for="exampleFormControlInput1" class="form-label">Shortened URL</label>
         <input type="text" class="form-control" id="shortened_public_url_form" value="${data}"  disabled>`
         document.getElementById("short-url-button").remove()
-   
-      }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-          console.log(XMLHttpRequest);
-          alert("Can't reach servers! Try Again Later!!!");
+
+      }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log(XMLHttpRequest);
+        alert("Can't reach servers! Try Again Later!!!");
       })
     }
-    </script>
+  </script>
   </div>
 
 
@@ -1066,8 +1263,76 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Three.js 3D Background Setup
+    const canvas = document.querySelector('#bg-canvas');
+    if (canvas) {
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x000000, 0.04);
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.position.setZ(15);
 
+      const geometry = new THREE.IcosahedronGeometry(10, 1);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x1D9BF0, wireframe: true, transparent: true, opacity: 0.15
+      });
+      const torus = new THREE.Mesh(geometry, material);
+      scene.add(torus);
+
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 300;
+      const posArray = new Float32Array(particlesCount * 3);
+      for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 60;
+      }
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05, color: 0xE7E9EA, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending
+      });
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      const windowHalfX = window.innerWidth / 2;
+      const windowHalfY = window.innerHeight / 2;
+
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+        torus.rotation.x += 0.002;
+        torus.rotation.y += 0.003;
+        torus.rotation.z += 0.001;
+        torus.position.y = Math.sin(elapsedTime * 0.5) * 1.5;
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        scene.rotation.y += 0.05 * (targetX - scene.rotation.y);
+        scene.rotation.x += 0.05 * (targetY - scene.rotation.x);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+  </script>
 </body>
 
 </html>
