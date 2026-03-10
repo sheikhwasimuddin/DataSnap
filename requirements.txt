@@ -1,0 +1,13 @@
+setuptools==82.0.0
+wheel
+
+Flask==2.0.1
+Werkzeug==2.0.3
+gunicorn>=21.2.0
+
+pyrebase4
+python-dotenv
+requests
+
+grpcio>=1.62.0
+protobuf>=4.21.0
