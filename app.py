@@ -57,7 +57,10 @@ def index():
             return render_template("dashboard.html",forms = all_forms,handle_catch = handle_catch)
 
         except Exception as e:
-            mes_code = json.loads(e.args[1])['error']['message']
+            try:
+                mes_code = json.loads(e.args[1])['error']['message']
+            except (IndexError, json.JSONDecodeError, TypeError, KeyError):
+                mes_code = "UNKNOWN_ERROR"
 
             if mes_code == "INVALID_PASSWORD":
                 res_code = 500
