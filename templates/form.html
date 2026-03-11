@@ -232,7 +232,7 @@
               {% endif %}
             </div>
           </div>
-          <form action="{{callback_url}}" method="post">
+          <form action="{{callback_url}}" method="post" enctype="multipart/form-data">
             {% call catch('') %}
             {% for key,val in form_data['data'].items()%}
             {% if val != "timestamp" %}
@@ -244,6 +244,13 @@
                   endif %}>
                 <label>{{val['text']}} {% if val['required']=="true" %}<span style="color:red">*</span>{% endif
                   %}</label>
+              </div>
+              {% elif val['type'] == "image" %}
+              <div class="input-field col s12">
+                <span class="question-label">{{val['text']}} {% if val['required']=="true" %}<span
+                    style="color:red">*</span>{% endif %}</span>
+                <input type="file" name="{{key}}" accept="image/*" {% if val['required']=="true" %}required{% endif %}
+                  style="color: #E7E9EA; margin-bottom: 20px;">
               </div>
               {% elif val['type'] == "select" %}
               <span class="question-label">{{val['text']}} {% if val['required']=="true" %}<span

@@ -395,11 +395,6 @@
         </button>
 
         <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal"
-          data-bs-target="#Properties_Modal">
-          <i class="fa fa-sliders-h mx-1"></i> PROPS
-        </button>
-
-        <button type="button" class="btn btn-info mx-2 contri_btn" style="float:right" data-bs-toggle="modal"
           data-bs-target="#Details_Modal">
           <i class="fa fa-info-circle mx-1"></i> DETAILS
         </button>
@@ -493,59 +488,6 @@
       </div>
 
 
-      <div class="modal fade" id="Properties_Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Field Properties</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-              <div class="row" id="Properties_Fields">
-                {% call catch('') %}
-                {% for key,val in form_data['data'].items()%}
-                {% if val!="timestamp" %}
-                {% if val['required'] == "true" %}
-                <div class="col-auto">
-                  <input type="text" class="form-control" value="{{val['text']}}" disabled>
-                </div>
-                <div class="col-auto">
-
-                  <div class="form-check form-switch my-2">
-                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch"
-                      id="Required_{{key}}" checked>
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
-                  </div>
-                </div>
-                {% else %}
-                <div class="col-auto">
-                  <input type="text" class="form-control" value="{{val['text']}}" disabled>
-                </div>
-                <div class="col-auto">
-
-                  <div class="form-check form-switch my-2">
-                    <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch"
-                      id="Required_{{key}}">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
-                  </div>
-                </div>
-                {% endif %}
-                {% endif %}
-                {% endfor %}
-                {% endcall %}
-
-              </div>
-            </div>
-            <div class="modal-footer">
-              <p style="color:#ec4899; font-size: 0.875rem;"><i class="fa fa-info-circle mx-1"></i>Refresh if field
-                appears empty</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
 
 
       <div class="modal fade" id="Add_Field_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -584,6 +526,12 @@
                 <input class="form-check-input" type="radio" name="flexRadioDefault" id="checkbox_field">
                 <label class="form-check-label" for="flexRadioDefault4">
                   Checkboxes (Multiple Select)
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="image_field">
+                <label class="form-check-label" for="flexRadioDefault5">
+                  Image Upload
                 </label>
               </div>
             </div>
@@ -658,20 +606,40 @@
       {% call catch('') %}
       {% for key,val in form_data['data'].items()%}
       {% if val != "timestamp" %}
+
       {% if val['type'] == 'text' or val['type'] == 'email'%}
-      <div class="input-group my-2" id="{{key}}">
+      <div class="input-group align-items-center my-3 p-3" id="{{key}}"
+        style="border: 1px solid var(--border); border-radius: 8px;">
         {% if val['type'] == 'email' %}
         <input class="input-group-text mx-2" value="{{val['text']}}" disabled>
         {% else %}
         <input class="input-group-text mx-2" value="{{val['text']}}">
         {% endif %}
         <input type="text" class="form-control" disabled>
+        <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" role="switch" id="Required_{{key}}"
+            onchange="Toggle_Required(this, '{{key}}')" {% if val['required']=="true" %}checked{% endif %}>
+          <label class="form-check-label ms-2" for="Required_{{key}}">Req</label>
+        </div>
         <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
-
-
       </div>
+
+      {% elif val['type'] == 'image' %}
+      <div class="input-group align-items-center my-3 p-3" id="{{key}}"
+        style="border: 1px solid var(--border); border-radius: 8px;">
+        <input class="input-group-text mx-2" value="{{val['text']}}">
+        <input type="file" class="form-control" disabled accept="image/*">
+        <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" role="switch" id="Required_{{key}}"
+            onchange="Toggle_Required(this, '{{key}}')" {% if val['required']=="true" %}checked{% endif %}>
+          <label class="form-check-label ms-2" for="Required_{{key}}">Req</label>
+        </div>
+        <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
+      </div>
+
       {% elif val['type'] == 'select' %}
-      <div class="input-group my-2" id="{{key}}">
+      <div class="input-group align-items-center my-3 p-3" id="{{key}}"
+        style="border: 1px solid var(--border); border-radius: 8px;">
         <input class="input-group-text mx-2" value="{{val['text']}}">
         <select name="" id="{{key}}_select" class="form-control" disabled>
           <option value="Options" default> Option List (Select)</option>
@@ -679,13 +647,19 @@
           <option value="{{key_opt}}">{{opt}}</option>
           {% endfor %}
         </select>
+        <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" role="switch" id="Required_{{key}}"
+            onchange="Toggle_Required(this, '{{key}}')" {% if val['required']=="true" %}checked{% endif %}>
+          <label class="form-check-label ms-2" for="Required_{{key}}">Req</label>
+        </div>
         <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
           data-bs-target="#{{key}}_Options_Modal"></i>
         <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
       </div>
 
       {% elif val['type'] == 'radio' %}
-      <div class="input-group my-2" id="{{key}}">
+      <div class="input-group align-items-center my-3 p-3" id="{{key}}"
+        style="border: 1px solid var(--border); border-radius: 8px;">
         <input class="input-group-select mx-2" value="{{val['text']}}">
         <div id="{{key}}_select" class="form-control"
           style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
@@ -698,13 +672,19 @@
           <span style="color:var(--text-secondary); font-size:0.9rem;">(Multiple Choice Options)</span>
           {% endfor %}
         </div>
+        <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" role="switch" id="Required_{{key}}"
+            onchange="Toggle_Required(this, '{{key}}')" {% if val['required']=="true" %}checked{% endif %}>
+          <label class="form-check-label ms-2" for="Required_{{key}}">Req</label>
+        </div>
         <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
           data-bs-target="#{{key}}_Options_Modal"></i>
         <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('{{key}}')"></i>
       </div>
 
       {% elif val['type'] == 'checkbox' %}
-      <div class="input-group my-2" id="{{key}}">
+      <div class="input-group align-items-center my-3 p-3" id="{{key}}"
+        style="border: 1px solid var(--border); border-radius: 8px;">
         <input class="input-group-select mx-2" value="{{val['text']}}">
         <div id="{{key}}_select" class="form-control"
           style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
@@ -716,6 +696,11 @@
           {% else %}
           <span style="color:var(--text-secondary); font-size:0.9rem;">(Checkbox Options)</span>
           {% endfor %}
+        </div>
+        <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" role="switch" id="Required_{{key}}"
+            onchange="Toggle_Required(this, '{{key}}')" {% if val['required']=="true" %}checked{% endif %}>
+          <label class="form-check-label ms-2" for="Required_{{key}}">Req</label>
         </div>
         <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal"
           data-bs-target="#{{key}}_Options_Modal"></i>
@@ -741,7 +726,7 @@
                 <div class="col" id="{{key}}_all_options">
                   {% for key_opt,opt in val['options'].items()%}
                   <span class="badge rounded-pill bg-primary my-1" id="{{key_opt}}">{{opt}}<i
-                      class="fa fa-times-circle  mx-1" style="cursor:pointer"
+                      class="fa fa-times-circle mx-1" style="cursor:pointer"
                       onclick="Remove_Option('{{key}}','{{key_opt}}')"></i></span>
                   {% endfor %}
                 </div>
@@ -822,103 +807,70 @@
 
     function Add_Field() {
       if (document.getElementById("text_field").checked) {
-
         let uid_field = makeid(7)
         let container = document.getElementById("main_form")
-        let Properties_Fields = document.getElementById("Properties_Fields")
-        container.innerHTML += ` <div class="input-group my-2" id="${uid_field}">
+        container.innerHTML += ` <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
         <input class="input-group-text mx-2">
           <input type="text"  class="form-control" disabled>
-          <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
-  
-      </div> `
-        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
-          <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
-        </div>
-        <div class="col-auto">
-          
-          <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
-            <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
+          <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+            <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
           </div>
-        </div>`
-        data[uid_field] = {
+          <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
+      </div> `
 
-        }
-        data[uid_field]['type'] = "text"
-
-        all_input_group_text = document.getElementsByClassName("input-group-text")
-        if (all_input_group_text.length != 0) {
-          for (let i = 0; i < all_input_group_text.length; i++) {
-            let temp_elem = all_input_group_text[i]
-            temp_elem.addEventListener("input", function () {
-              let parent_id = temp_elem.parentElement.id
-              data[parent_id]['text'] = temp_elem.value
-              document.getElementById("props_" + parent_id).value = temp_elem.value
-
-              temp_elem.setAttribute("value", temp_elem.value)
-            })
-          }
-        }
-
+        data[uid_field] = { type: "text" }
+        attachInputListeners()
       }
 
       else if (document.getElementById("email_field").checked) {
-
         let uid_field = makeid(7)
         let container = document.getElementById("main_form")
-        let Properties_Fields = document.getElementById("Properties_Fields")
-        container.innerHTML += ` <div class="input-group my-2" id="${uid_field}">
+        container.innerHTML += ` <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
         <input class="input-group-text mx-2" value="Email" disabled>
           <input type="email"  class="form-control" disabled>
-          <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
-  
-      </div> `
-        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
-          <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
-        </div>
-        <div class="col-auto">
-          
-          <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
-            <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
+          <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+            <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
           </div>
-        </div>`
-        data[uid_field] = {
+          <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
+      </div> `
 
-        }
-        data[uid_field]['type'] = "email"
-        data[uid_field]['text'] = "Email"
+        data[uid_field] = { type: "email", text: "Email" }
+        attachInputListeners()
+      }
 
-        all_input_group_text = document.getElementsByClassName("input-group-text")
-        if (all_input_group_text.length != 0) {
-          for (let i = 0; i < all_input_group_text.length; i++) {
-            let temp_elem = all_input_group_text[i]
-            temp_elem.addEventListener("input", function () {
+      else if (document.getElementById("image_field").checked) {
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        container.innerHTML += ` <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
+        <input class="input-group-text mx-2" value="Image Upload">
+          <input type="file" class="form-control" disabled accept="image/*">
+          <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+            <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
+          </div>
+          <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick = "Remove_Field('${uid_field}')"></i>
+      </div> `
 
-              let parent_id = temp_elem.parentElement.id
-              data[parent_id]['text'] = temp_elem.value
-
-              temp_elem.setAttribute("value", temp_elem.value)
-            })
-          }
-        }
-
+        data[uid_field] = { type: "image", text: "Image Upload" }
+        attachInputListeners()
       }
 
       else if (document.getElementById("radio_field").checked) {
         let uid_field = makeid(7)
         let container = document.getElementById("main_form")
-        let Properties_Fields = document.getElementById("Properties_Fields")
-        container.innerHTML += `    <div class="input-group my-2" id="${uid_field}">
+        container.innerHTML += `    <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
             <input class="input-group-select mx-2" value="Multiple Choice">
             <div id="${uid_field}_select" class="form-control" style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
-             <!-- Options will mount here -->
              <span style="color:var(--text-secondary); font-size:0.9rem;">(Multiple Choice Options)</span>
+            </div>
+            <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+              <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
             </div>
             <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#Options_Modal_${uid_field}"></i>
             <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('${uid_field}')"></i>
-    
           </div>
           
           <div class="modal fade" id="Options_Modal_${uid_field}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -935,7 +887,6 @@
                   </div>
                   <div class="row">
                     <div class="col" id="${uid_field}_all_options">
-                      
                     </div>
                   </div>
                 </div>
@@ -947,37 +898,24 @@
             </div>
           </div>`
 
-        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
-      <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
-    </div>
-    <div class="col-auto">
-      <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
-        <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
-        <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
-      </div>
-    </div>`
-
-        data[uid_field] = {}
-        data[uid_field]['type'] = "radio"
-        data[uid_field]['text'] = "Multiple Choice"
-        data[uid_field]['options'] = {}
-
+        data[uid_field] = { type: "radio", text: "Multiple Choice", options: {} }
         attachInputListeners()
       }
 
       else if (document.getElementById("checkbox_field").checked) {
         let uid_field = makeid(7)
         let container = document.getElementById("main_form")
-        let Properties_Fields = document.getElementById("Properties_Fields")
-        container.innerHTML += `    <div class="input-group my-2" id="${uid_field}">
+        container.innerHTML += `    <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
             <input class="input-group-select mx-2" value="Checkboxes">
             <div id="${uid_field}_select" class="form-control" style="background:transparent; border:none; padding:0; display:flex; flex-direction:column; gap:8px;">
-             <!-- Options will mount here -->
              <span style="color:var(--text-secondary); font-size:0.9rem;">(Checkbox Options)</span>
+            </div>
+            <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+              <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
             </div>
             <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#Options_Modal_${uid_field}"></i>
             <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('${uid_field}')"></i>
-    
           </div>
           
           <div class="modal fade" id="Options_Modal_${uid_field}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -994,7 +932,6 @@
                   </div>
                   <div class="row">
                     <div class="col" id="${uid_field}_all_options">
-                      
                     </div>
                   </div>
                 </div>
@@ -1006,21 +943,52 @@
             </div>
           </div>`
 
-        Properties_Fields.innerHTML += `<div class="col-auto" id="div_props_${uid_field}">
-      <input type="text" class="form-control" id="props_${uid_field}" value="" disabled>
-    </div>
-    <div class="col-auto">
-      <div class="form-check form-switch my-2" id="div_input_props_${uid_field}">
-        <input class="form-check-input required_checkboxes_fields" type="checkbox" role="switch" id="Required_${uid_field}">
-        <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
-      </div>
-    </div>`
+        data[uid_field] = { type: "checkbox", text: "Checkboxes", options: {} }
+        attachInputListeners()
+      }
 
-        data[uid_field] = {}
-        data[uid_field]['type'] = "checkbox"
-        data[uid_field]['text'] = "Checkboxes"
-        data[uid_field]['options'] = {}
+      else if (document.getElementById("select_field").checked) {
+        let uid_field = makeid(7)
+        let container = document.getElementById("main_form")
+        container.innerHTML += `    <div class="input-group align-items-center my-3 p-3" id="${uid_field}" style="border: 1px solid var(--border); border-radius: 8px;">
+            <input class="input-group-select mx-2" value="Select">
+            <select name="" id="${uid_field}_select" class="form-control" disabled>
+              <option value="Options" default> Option List (Select)</option>
+            </select>
+            <div class="form-check form-switch mx-3 mb-0 d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" role="switch" id="Required_${uid_field}" onchange="Toggle_Required(this, '${uid_field}')">
+              <label class="form-check-label ms-2" for="Required_${uid_field}">Req</label>
+            </div>
+            <i class="fa fa-plus-circle mx-1" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#Options_Modal_${uid_field}"></i>
+            <i class="fa fa-times-circle mx-1" style="cursor:pointer" onclick="Remove_Field('${uid_field}')"></i>
+          </div>
+          
+          <div class="modal fade" id="Options_Modal_${uid_field}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Manage Select Options</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Add New Option</label>
+                    <input type="text" class="form-control" id="${uid_field}_option_add" placeholder="Write option">
+                  </div>
+                  <div class="row">
+                    <div class="col" id="${uid_field}_all_options">
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="Add_Option('${uid_field}')">Add Option</button>
+                </div>
+              </div>
+            </div>
+          </div>`
 
+        data[uid_field] = { type: "select", text: "Select", options: {} }
         attachInputListeners()
       }
 
@@ -1164,19 +1132,12 @@
     //     }
     // })
 
-    console.log("___MBSA____")
-    all_required_checkboxes = document.getElementsByClassName("required_checkboxes_fields")
-    for (let i = 0; i < all_required_checkboxes.length; i++) {
-      all_required_checkboxes[i].addEventListener('change', function (e) {
-        if (this.checked) {
-          let temp_id = this.id.split('_')[1]
-          data[temp_id]['required'] = "true"
-        }
-        else {
-          let temp_id = this.id.split('_')[1]
-          data[temp_id]['required'] = "false"
-        }
-      })
+    function Toggle_Required(elem, id) {
+      if (elem.checked) {
+        data[id]['required'] = "true"
+      } else {
+        data[id]['required'] = "false"
+      }
     }
 
 
