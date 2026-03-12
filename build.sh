@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# Force-install setuptools into the venv — required by gcloud (pyrebase4 dependency)
-# Without --force-reinstall, pip may skip it if satisfied by system Python
-pip install --force-reinstall setuptools wheel
-pip install -r requirements.txt
+# Use python -m pip to guarantee we install into the active venv
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# Force setuptools into the venv AFTER other deps (pip may skip it otherwise)
+python -m pip install --ignore-installed setuptools
+
+# Verify pkg_resources is importable
+python -c "import pkg_resources; print('pkg_resources OK')"
