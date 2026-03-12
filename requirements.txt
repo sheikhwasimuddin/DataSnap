@@ -1,4 +1,4 @@
-setuptools>=69.0.0
+setuptools>=69.0.0,<75.0.0
 wheel
 
 Flask==2.0.1
